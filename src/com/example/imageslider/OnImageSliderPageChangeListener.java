@@ -10,21 +10,21 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 
 public class OnImageSliderPageChangeListener implements OnPageChangeListener {
 
-	ImageSliderViewPager vp;
+	private ImageSliderViewPager mViewPager;
 
 	public OnImageSliderPageChangeListener(ImageSliderViewPager vp) {
-		this.vp = vp;
+		mViewPager = vp;
 	}
 
 	@Override
 	public void onPageScrollStateChanged(int state) {
 		if (state == ViewPager.SCROLL_STATE_IDLE) {
-			int curr = vp.getCurrentItem();
-			int lastReal = vp.getAdapter().getCount() - 2;
-			if (curr == 0) {
-				vp.setCurrentItem(lastReal, false);
-			} else if (curr > lastReal) {
-				vp.setCurrentItem(1, false);
+			int currentPosition = mViewPager.getCurrentItem();
+			int lastReal = mViewPager.getAdapter().getCount() - 2;
+			if (currentPosition == 0) {
+				mViewPager.setCurrentItem(lastReal, false);
+			} else if (currentPosition > lastReal) {
+				mViewPager.setCurrentItem(1, false);
 			}
 		}
 	}
@@ -37,5 +37,4 @@ public class OnImageSliderPageChangeListener implements OnPageChangeListener {
 	public void onPageSelected(int position) {
 
 	}
-
 }

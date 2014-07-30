@@ -10,11 +10,6 @@ import android.view.View;
 
 public abstract class ImageSliderPagerAdapter<ImageSliderItem> extends BasePagerAdapter{
 
-	/**
-	 * The constructor
-	 * 
-	 * @param context
-	 */
 	public ImageSliderPagerAdapter(Activity context) {
 		super(context);
 	}

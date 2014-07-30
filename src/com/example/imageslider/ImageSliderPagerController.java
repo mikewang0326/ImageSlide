@@ -51,21 +51,37 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 	private boolean isShowInfo = true;
 	
 	private ArrayList<ImageSlideItem> mSlideList;
+	
+	private OnImageSliderPagerChangeListener<ImageSlideItem> mOnImageSliderPagerChangeListener;
 
 	@Override
 	protected void initView() {
 		Log.d(TAG, "initView mActivity = " + mActivity);
-		
+		initImageLoader();
+		mLayoutInfo = (LinearLayout) this.mView.findViewById(R.id.viewflow_dic_ll);
+		initAdapter();
+		initViewPager();
+		controlViewPagerSpeed();
+		initIndiacator();
+	}
+
+	private void initImageLoader() {
 		mOptions = new DisplayImageOptions.Builder()
 				// .showStubImage(R.drawable.bg_base_magazine_item)
 				// .showImageForEmptyUri(R.drawable.bg_base_magazine_item)
 				// .showImageOnFail(R.drawable.bg_base_magazine_item)
 				.cacheInMemory().cacheOnDisc()
 				.bitmapConfig(Bitmap.Config.RGB_565).build();
+	}
+
+	private void initViewPager() {
 		mViewPager = (ImageSliderViewPager) this.mView.findViewById(R.id.cvp);// 鑾峰緱cvp瀵硅薄
-		mLayoutInfo = (LinearLayout) this.mView.findViewById(R.id.viewflow_dic_ll);
+		mViewPager.setSliderAdapter(mAdapter);
+		mViewPager.setOnPageChangeListener(null);
+	}
+
+	private void initIndiacator() {
 		mIndicator = (CirclePageIndicator) this.mView.findViewById(R.id.viewflowindic);
-		
 		mIndicator.addMyOnAttachStateChangeListener(new MyOnAttachStateChangeListener() {
 			
 			@Override
@@ -84,23 +100,12 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 			
 		});
 		
-		mAdapter = new BannerPagerAdapter<ImageSlideItem>(mActivity);
-		
-		mAdapter.setShowInfoEnable(true);
-		
-		mAdapter.setCycleClickListener(mOnImageSliderPagerClickListener);
-		
-		mViewPager.setSliderAdapter(mAdapter);
-//		mViewPager.setOnCyclePageChangeListener(null);
-		mViewPager.setOnPageChangeListener(null);
-		
-		controlViewPagerSpeed();
 		mIndicator.setViewPager(mViewPager, 0);
 		mIndicator.setOnPageChangeListener(new OnPageChangeListener() {
 			@Override
 			public void onPageSelected(int arg0) {
-				if(mOnCycleImagePagerChangeListener!=null && mSlideList!=null && mSlideList.size()>arg0){
-					mOnCycleImagePagerChangeListener.OnCycleImagePagerChange(arg0, mSlideList.get(arg0));
+				if(mOnImageSliderPagerChangeListener!=null && mSlideList!=null && mSlideList.size()>arg0){
+					mOnImageSliderPagerChangeListener.OnCycleImagePagerChange(arg0, mSlideList.get(arg0));
 				}
 			}
 			
@@ -113,6 +118,12 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 			}
 		});
 	}
+
+	private void initAdapter() {
+		mAdapter = new BannerPagerAdapter<ImageSlideItem>(mActivity);
+		mAdapter.setShowInfoEnable(true);
+		mAdapter.setCycleClickListener(mOnImageSliderPagerClickListener);
+	}
 	
 	private void controlViewPagerSpeed() {  
 		try {  
@@ -123,15 +134,33 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 		    mScroller = new FixedSpeedScroller(  
 		    		mViewPager.getContext(),  
 		       null);  
-		    mScroller.setmDuration(2000); // 2000ms  
+		    mScroller.setmDuration(2000); 
 		    mField.set(mViewPager, mScroller);  
 		} catch (Exception e) {  
 		    e.printStackTrace();  
 		}  
 		   } 
 	
-	public void start() {
-		startAutoFlowTimer();
+	public void setShowInfo(boolean isShowInfo){
+		this.isShowInfo = isShowInfo;
+		if(isShowInfo){
+			mLayoutInfo.setVisibility(View.VISIBLE);
+		}else{
+			mLayoutInfo.setVisibility(View.INVISIBLE);
+		}
+	}
+	
+	public boolean isAutoFlow() {
+		return mAutoFlow;
+	}
+
+	public void setAutoFlow(boolean isAutoFlow) {
+		this.mAutoFlow = isAutoFlow;
+		if(isAutoFlow){
+			startAutoFlowTimer();
+		}else{
+			stopAutoFlowTimer();
+		}
 	}
 	
 	public void startAutoFlowTimer() {
@@ -148,7 +177,7 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 		mHandler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				if (getChildCount() <= 0+1)//1涓厓绱犱笉婊氬姩
+				if (getChildCount() <= 1)//1涓厓绱犱笉婊氬姩
 					return;
 				snapToScreen((getCurrentItem() + 1) % getChildCount());
 				Message message = mHandler.obtainMessage(0);
@@ -186,12 +215,11 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 	public void setData(ArrayList<ImageSlideItem> mList) {
 		this.mSlideList = mList;
 		mAdapter.setList(mList);
-		if(mOnCycleImagePagerChangeListener!=null && mList!=null && mList.size()>0){
-			mOnCycleImagePagerChangeListener.OnCycleImagePagerChange(0, mList.get(0));
+		if(mOnImageSliderPagerChangeListener!=null && mList!=null && mList.size()>0){
+			mOnImageSliderPagerChangeListener.OnCycleImagePagerChange(0, mList.get(0));
 		}
 	}
 
-	// cycle image paper click
 	OnCycleImagePagerClickListener<ImageSlideItem> mOnImageSliderPagerClickListener;
 
 	public void setmOnCycleImagePagerClickListener(
@@ -203,6 +231,15 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 		public void OnCycleImagePagerClick(int dataid, T t);
 	}
 	
+	public void setOnImageSliderPagerChangeListener(
+			OnImageSliderPagerChangeListener<ImageSlideItem> onImageSliderPagerChangeListener) {
+		this.mOnImageSliderPagerChangeListener = onImageSliderPagerChangeListener;
+	}
+
+	public interface OnImageSliderPagerChangeListener<ImageItemInfo> {
+		public void OnCycleImagePagerChange(int pageid, ImageItemInfo t);
+	}
+	
 	@Override
 	public void onDestory() {
 		Log.d(TAG, "CycleImagePagerController onDestroy() mIndicator = " + mIndicator);
@@ -210,41 +247,6 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 			stopAutoFlowTimer();
 		}
 		super.onDestory();
-	}
-	
-	public boolean isAutoFlow() {
-		return mAutoFlow;
-	}
-
-	public void setAutoFlow(boolean isAutoFlow) {
-		this.mAutoFlow = isAutoFlow;
-		if(isAutoFlow){
-			startAutoFlowTimer();
-		}else{
-			stopAutoFlowTimer();
-		}
-	}
-	
-	public void setShowInfo(boolean isShowInfo){
-		this.isShowInfo = isShowInfo;
-		if(isShowInfo){
-			mLayoutInfo.setVisibility(View.VISIBLE);
-		}else{
-			mLayoutInfo.setVisibility(View.INVISIBLE);
-		}
-	}
-	
-	// cycle image paper change
-	OnCycleImagePagerChangeListener<ImageSlideItem> mOnCycleImagePagerChangeListener;
-
-
-	public void setmOnCycleImagePagerChangeListener(
-			OnCycleImagePagerChangeListener<ImageSlideItem> mOnCycleImagePagerChangeListener) {
-		this.mOnCycleImagePagerChangeListener = mOnCycleImagePagerChangeListener;
-	}
-
-	public interface OnCycleImagePagerChangeListener<ImageItemInfo> {
-		public void OnCycleImagePagerChange(int pageid, ImageItemInfo t);
 	}
 	
 }
