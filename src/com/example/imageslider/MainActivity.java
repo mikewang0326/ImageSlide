@@ -33,7 +33,6 @@ public class MainActivity extends Activity {
 		
 		cycleController.setShowInfo(true);
 		
-		cycleController.setAutoFlow(true);
 
 		cycleController.setmOnCycleImagePagerChangeListener(new ImageSliderPagerController.OnCycleImagePagerChangeListener<ImageSlideItem>() {
 
@@ -56,6 +55,8 @@ public class MainActivity extends Activity {
 		list.add(bannerItem);
 		
 		cycleController.setData(list);
+		
+		cycleController.setAutoFlow(true);
 	}
 	
 }

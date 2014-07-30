@@ -42,15 +42,19 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 	
 	private Handler mHandler;
 	
+    private boolean mAutoFlow = true;
+	
 	private int mTimeSpan = 5000;//default value
 	
-	private LinearLayout mInfo;
+	private LinearLayout mLayoutInfo;
 	
-	private ArrayList<ImageSlideItem> mList;
+	private boolean isShowInfo = true;
+	
+	private ArrayList<ImageSlideItem> mSlideList;
 
 	@Override
 	protected void initView() {
-		Log.d("main", "initView mActivity = " + mActivity);
+		Log.d(TAG, "initView mActivity = " + mActivity);
 		
 		mOptions = new DisplayImageOptions.Builder()
 				// .showStubImage(R.drawable.bg_base_magazine_item)
@@ -59,7 +63,7 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 				.cacheInMemory().cacheOnDisc()
 				.bitmapConfig(Bitmap.Config.RGB_565).build();
 		mViewPager = (ImageSliderViewPager) this.mView.findViewById(R.id.cvp);// 鑾峰緱cvp瀵硅薄
-		mInfo = (LinearLayout) this.mView.findViewById(R.id.viewflow_dic_ll);
+		mLayoutInfo = (LinearLayout) this.mView.findViewById(R.id.viewflow_dic_ll);
 		mIndicator = (CirclePageIndicator) this.mView.findViewById(R.id.viewflowindic);
 		
 		mIndicator.addMyOnAttachStateChangeListener(new MyOnAttachStateChangeListener() {
@@ -67,7 +71,7 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 			@Override
 			public void onViewAttachedToWindow(View v) {
 				Log.d(TAG, "onViewAttachedToWindow()");
-				if(isAutoFlow){
+				if(mAutoFlow){
 					startAutoFlowTimer();
 				}
 			}
@@ -80,7 +84,7 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 			
 		});
 		
-		mAdapter = new BannerPagerAdapter<ImageSlideItem>(this.mActivity);
+		mAdapter = new BannerPagerAdapter<ImageSlideItem>(mActivity);
 		
 		mAdapter.setShowInfoEnable(true);
 		
@@ -95,8 +99,8 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 		mIndicator.setOnPageChangeListener(new OnPageChangeListener() {
 			@Override
 			public void onPageSelected(int arg0) {
-				if(mOnCycleImagePagerChangeListener!=null && mList!=null && mList.size()>arg0){
-					mOnCycleImagePagerChangeListener.OnCycleImagePagerChange(arg0, mList.get(arg0));
+				if(mOnCycleImagePagerChangeListener!=null && mSlideList!=null && mSlideList.size()>arg0){
+					mOnCycleImagePagerChangeListener.OnCycleImagePagerChange(arg0, mSlideList.get(arg0));
 				}
 			}
 			
@@ -126,8 +130,20 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 		}  
 		   } 
 	
+	public void start() {
+		startAutoFlowTimer();
+	}
+	
 	public void startAutoFlowTimer() {
 		stopAutoFlowTimer();
+		initHanlderIfNeed();
+		Message message = mHandler.obtainMessage(0);
+		mHandler.sendMessageDelayed(message, mTimeSpan);
+	}
+
+	private void initHanlderIfNeed() {
+		if (null != mHandler)
+			return;
 		
 		mHandler = new Handler() {
 			@Override
@@ -139,11 +155,8 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 				sendMessageDelayed(message, mTimeSpan);
 			}
 		};
-
-		Message message = mHandler.obtainMessage(0);
-		mHandler.sendMessageDelayed(message, mTimeSpan);
 	}
-
+	
 	public void setTimeSpan(int timeSpan) {
 		mTimeSpan = timeSpan;
 	}
@@ -171,7 +184,7 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 	}
 
 	public void setData(ArrayList<ImageSlideItem> mList) {
-		this.mList = mList;
+		this.mSlideList = mList;
 		mAdapter.setList(mList);
 		if(mOnCycleImagePagerChangeListener!=null && mList!=null && mList.size()>0){
 			mOnCycleImagePagerChangeListener.OnCycleImagePagerChange(0, mList.get(0));
@@ -181,21 +194,6 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 	// cycle image paper click
 	OnCycleImagePagerClickListener<ImageSlideItem> mOnImageSliderPagerClickListener;
 
-	/**
-	 * Set the mOnCycleImagePagerClickListener
-	 * 
-	 * @return the mOnCycleImagePagerClickListener
-	 */
-	public OnCycleImagePagerClickListener<ImageSlideItem> getmOnCycleImagePagerClickListener() {
-		return mOnImageSliderPagerClickListener;
-	}
-
-	/**
-	 * Get the mOnCycleImagePagerClickListener
-	 * 
-	 * @param mOnCycleImagePagerClickListener
-	 *            the mOnCycleImagePagerClickListener to set
-	 */
 	public void setmOnCycleImagePagerClickListener(
 			OnCycleImagePagerClickListener<ImageSlideItem> mOnCycleImagePagerClickListener) {
 		this.mOnImageSliderPagerClickListener = mOnCycleImagePagerClickListener;
@@ -213,17 +211,13 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 		}
 		super.onDestory();
 	}
-	//-----------------------
-	//autoFlow
-	private boolean isAutoFlow = true;
-	
 	
 	public boolean isAutoFlow() {
-		return isAutoFlow;
+		return mAutoFlow;
 	}
 
 	public void setAutoFlow(boolean isAutoFlow) {
-		this.isAutoFlow = isAutoFlow;
+		this.mAutoFlow = isAutoFlow;
 		if(isAutoFlow){
 			startAutoFlowTimer();
 		}else{
@@ -231,29 +225,18 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 		}
 	}
 	
-	//-----------------------
-	//showinfo
-
-	private boolean isShowInfo = true;
 	public void setShowInfo(boolean isShowInfo){
 		this.isShowInfo = isShowInfo;
 		if(isShowInfo){
-			mInfo.setVisibility(View.VISIBLE);
+			mLayoutInfo.setVisibility(View.VISIBLE);
 		}else{
-			mInfo.setVisibility(View.INVISIBLE);
+			mLayoutInfo.setVisibility(View.INVISIBLE);
 		}
 	}
 	
-	public boolean getShowInfo(){
-		return isShowInfo;
-	}
-	//-----------------------------
 	// cycle image paper change
 	OnCycleImagePagerChangeListener<ImageSlideItem> mOnCycleImagePagerChangeListener;
 
-	public OnCycleImagePagerChangeListener<ImageSlideItem> getmOnCycleImagePagerChangeListener() {
-		return mOnCycleImagePagerChangeListener;
-	}
 
 	public void setmOnCycleImagePagerChangeListener(
 			OnCycleImagePagerChangeListener<ImageSlideItem> mOnCycleImagePagerChangeListener) {
@@ -264,11 +247,4 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 		public void OnCycleImagePagerChange(int pageid, ImageItemInfo t);
 	}
 	
-	public void onResume() {
-		startAutoFlowTimer();
-	}
-	
-	public void onStop() {
-		stopAutoFlowTimer();
-	}
 }
