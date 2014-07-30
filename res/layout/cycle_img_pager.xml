@@ -6,40 +6,42 @@
     android:layout_height="@dimen/ht_base_viewflow"
     android:background="#ffffff"
     android:orientation="vertical" >
-        <FrameLayout
-            android:id="@+id/framelayout"
+
+    <FrameLayout
+        android:id="@+id/framelayout"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/ht_base_viewflow"
+        android:background="#ffffff" >
+
+        <com.example.imageslider.ImageSliderViewPager
+            android:id="@+id/cvp"
             android:layout_width="fill_parent"
-            android:layout_height="@dimen/ht_base_viewflow"
-            android:background="#ffffff" >
+            android:layout_height="@dimen/ht_base_viewflow" >
+        </com.example.imageslider.ImageSliderViewPager>
 
-            <com.example.imageslider.CycleViewPager
-                android:id="@+id/cvp"
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/ht_base_viewflow" >
-            </com.example.imageslider.CycleViewPager>
+        <LinearLayout
+            android:id="@+id/viewflow_dic_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/bg_base_viewflow_indicator_container"
+            android:gravity="center" >
 
-            <LinearLayout
-                android:id="@+id/viewflow_dic_ll"
+            <com.example.imageslider.CirclePageIndicator
+                android:id="@+id/viewflowindic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|bottom"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/bg_base_viewflow_indicator_container"
-                android:gravity="center" >
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                app:fillColor="#FFCE0F7A"
+                app:pageColor="#FF666666"
+                app:radius="3dp"
+                app:strokeColor="#FF000000"
+                app:strokeWidth="0dp" />
+        </LinearLayout>
+    </FrameLayout>
 
-                <com.example.imageslider.CirclePageIndicator
-                    android:id="@+id/viewflowindic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="#00000000"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    app:fillColor="#FFCE0F7A"
-                    app:pageColor="#FF666666"
-                    app:radius="3dp"
-                    app:strokeColor="#FF000000"
-                    app:strokeWidth="0dp" />
-            </LinearLayout>
-        </FrameLayout>
 </LinearLayout>

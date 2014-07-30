@@ -10,7 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-public class CycleViewPager extends ViewPager {
+public class ImageSliderViewPager extends ViewPager {
 
 	/**
 	 * The constructor
@@ -18,7 +18,7 @@ public class CycleViewPager extends ViewPager {
 	 * @param context
 	 * @param attrs
 	 */
-	public CycleViewPager(Context context, AttributeSet attrs) {
+	public ImageSliderViewPager(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
 
@@ -27,15 +27,15 @@ public class CycleViewPager extends ViewPager {
 	 * 
 	 * @param context
 	 */
-	public CycleViewPager(Context context) {
+	public ImageSliderViewPager(Context context) {
 		super(context);
 	}
 
-	public void setCycleAdapter(CyclePagerAdapter adapter) {
+	public void setCycleAdapter(ImageSliderPagerAdapter adapter) {
 		super.setAdapter(adapter);
 	}
 
-	public void setOnCyclePageChangeListener(OnCyclePageChangeListener listener) {
+	public void setOnCyclePageChangeListener(OnImageSliderPageChangeListener listener) {
 		super.setOnPageChangeListener(listener);
 	}
 

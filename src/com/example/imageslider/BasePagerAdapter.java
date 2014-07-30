@@ -7,14 +7,14 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-public abstract class ArrayListPagerAdapter<T> extends PagerAdapter {
+public abstract class BasePagerAdapter<T> extends PagerAdapter {
 	protected ArrayList<T> mList;
 	protected Activity mContext;
 
 	// 缓存pageView
 	protected View[] mPageViews;
 
-	public ArrayListPagerAdapter(Activity context) {
+	public BasePagerAdapter(Activity context) {
 		this.mContext = context;
 		mList = new ArrayList<T>();
 	}
@@ -119,21 +119,4 @@ public abstract class ArrayListPagerAdapter<T> extends PagerAdapter {
 			mPageViews[position] = null;
 		}
 	}
-
-	// -------------------------------------------
-	// item 中 某个控件 点击监听器
-	// -------------------------------------------
-	public OnItemSubViewClickListener mOnItemSubViewClickListener;
-
-	public void setOnItemSubViewClickListener(
-			OnItemSubViewClickListener listener) {
-		mOnItemSubViewClickListener = listener;
-	}
-
-	public final OnItemSubViewClickListener getOnItemSubViewClickListener() {
-		return mOnItemSubViewClickListener;
-	}
-
-	// -----------------------------------------------
-
 }

@@ -18,14 +18,14 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		CycleImagePagerController<ImageItemInfo> cycleController = new CycleImagePagerController<ImageItemInfo>(this,
+		ImageSliderPagerController<ImageSlideItem> cycleController = new ImageSliderPagerController<ImageSlideItem>(this,
 				null, false);
 		cycleController
-				.setmOnCycleImagePagerClickListener(new CycleImagePagerController.OnCycleImagePagerClickListener<ImageItemInfo>() {
+				.setmOnCycleImagePagerClickListener(new ImageSliderPagerController.OnCycleImagePagerClickListener<ImageSlideItem>() {
 
 					@Override
 					public void OnCycleImagePagerClick(int dataid,
-							ImageItemInfo t) {
+							ImageSlideItem t) {
 						Log.d(TAG, "OnCycleImagePagerClick() dataid = " + dataid);
 					}
 
@@ -35,25 +35,25 @@ public class MainActivity extends Activity {
 		
 		cycleController.setAutoFlow(true);
 
-		cycleController.setmOnCycleImagePagerChangeListener(new CycleImagePagerController.OnCycleImagePagerChangeListener<ImageItemInfo>() {
+		cycleController.setmOnCycleImagePagerChangeListener(new ImageSliderPagerController.OnCycleImagePagerChangeListener<ImageSlideItem>() {
 
 			@Override
-			public void OnCycleImagePagerChange(int pageid, ImageItemInfo t) {
+			public void OnCycleImagePagerChange(int pageid, ImageSlideItem t) {
 				Log.d(TAG, "OnCycleImagePagerChange() pageid = " + pageid);
 			}
 		
 		});
 		
-		ImageItemInfo imageItemInfo = new ImageItemInfo();
-	    imageItemInfo.setDescripe("test");
-	    imageItemInfo.setHref("http://www.sina.com.cn");
-		imageItemInfo.setImageUrl("http://s3.51cto.com/wyfs02/M00/39/6C/wKiom1O6FhuT6jR3AAElYgNBeaQ888.jpg");
+		BannerItem bannerItem = new BannerItem();
+	    bannerItem.setDescription("test");
+	    bannerItem.setHref("http://www.sina.com.cn");
+		bannerItem.setImageUrl("http://s3.51cto.com/wyfs02/M00/39/6C/wKiom1O6FhuT6jR3AAElYgNBeaQ888.jpg");
 		
-		ArrayList<ImageItemInfo> list = new ArrayList<ImageItemInfo>();
-		list.add(imageItemInfo);
-		list.add(imageItemInfo);
-		list.add(imageItemInfo);
-		list.add(imageItemInfo);
+		ArrayList<ImageSlideItem> list = new ArrayList<ImageSlideItem>();
+		list.add(bannerItem);
+		list.add(bannerItem);
+		list.add(bannerItem);
+		list.add(bannerItem);
 		
 		cycleController.setData(list);
 	}
