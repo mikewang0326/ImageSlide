@@ -21,10 +21,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.baidu.mapframework.commonlib.imageutils.core.DisplayImageOptions;
-import com.baidu.mapframework.commonlib.imageutils.core.ImageLoader;
-import com.baidu.mapframework.commonlib.imageutils.core.ImageLoaderFactory;
 import com.example.imageslider.CirclePageIndicator.MyOnAttachStateChangeListener;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class CycleImagePagerController<T> extends ViewBaseController {
 	
@@ -36,7 +35,7 @@ public class CycleImagePagerController<T> extends ViewBaseController {
 				isInflater ? R.layout.cycle_img_pager : INVALID_LAYOUT_RES_ID);
 	}
 
-	private ImageLoader mImgLoader;
+//	private ImageLoader mImgLoader = ImageLoader.getInstance();
 	private DisplayImageOptions mOptions;
 
 	private CycleViewPager mViewPager;
@@ -55,7 +54,7 @@ public class CycleImagePagerController<T> extends ViewBaseController {
 	protected void initView() {
 		Log.d("main", "initView mActivity = " + mActivity);
 		
-		mImgLoader = ImageLoaderFactory.getImageLoader(mActivity);
+//		mImgLoader = ImageLoaderFactory.getImageLoader(mActivity);
 		mOptions = new DisplayImageOptions.Builder()
 				// .showStubImage(R.drawable.bg_base_magazine_item)
 				// .showImageForEmptyUri(R.drawable.bg_base_magazine_item)
@@ -104,7 +103,7 @@ public class CycleImagePagerController<T> extends ViewBaseController {
 				Log.d("main", "createViewItem item = " + item);
 				
 				if (item != null) {
-					mImgLoader.displayImage(item.getImg(), img,
+					ImageLoader.getInstance().displayImage(item.getImg(), img,
 							mOptions);
 					title.setText(item.getTitle() != null ? item.getTitle()
 							: "");
