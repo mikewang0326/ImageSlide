@@ -104,7 +104,6 @@ public abstract class ArrayListPagerAdapter<T> extends PagerAdapter {
 		if (mPageViews != null && position < mPageViews.length) {
 			if (mPageViews[position] == null) {
 				mPageViews[position] = createViewItem(position);
-
 			}
 			container.addView(mPageViews[position], 0);
 			return mPageViews[position];

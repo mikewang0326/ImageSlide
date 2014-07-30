@@ -311,4 +311,12 @@ public class CycleImagePagerController<T> extends ViewBaseController {
 	public interface OnCycleImagePagerChangeListener<T> {
 		public void OnCycleImagePagerChange(int pageid, T t);
 	}
+	
+	public void onResume() {
+		startAutoFlowTimer();
+	}
+	
+	public void onStop() {
+		stopAutoFlowTimer();
+	}
 }
