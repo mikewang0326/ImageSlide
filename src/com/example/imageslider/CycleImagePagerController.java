@@ -40,7 +40,7 @@ public class CycleImagePagerController<T> extends ViewBaseController {
 
 	private CycleViewPager mViewPager;
 
-	private CyclePagerAdapter<CycleImgPagerInfo<T>> mAdapter;
+	private CyclePagerAdapter<ImageItemInfo> mAdapter;
 	
 	private CirclePageIndicator mIndicator;
 	private FixedSpeedScroller mScroller;
@@ -83,10 +83,10 @@ public class CycleImagePagerController<T> extends ViewBaseController {
 			
 		});
 		
-		mAdapter = new CyclePagerAdapter<CycleImgPagerInfo<T>>(this.mActivity) {
+		mAdapter = new CyclePagerAdapter<ImageItemInfo>(this.mActivity) {
 			@Override
 			public View createViewItem(final int position) {
-				final CycleImgPagerInfo<T> item = (CycleImgPagerInfo<T>) this
+				final ImageItemInfo item = (ImageItemInfo) this
 						.getItem(position);
 				View v = this.mContext.getLayoutInflater().inflate(
 						R.layout.cycle_img_pager_item, null);
@@ -103,7 +103,7 @@ public class CycleImagePagerController<T> extends ViewBaseController {
 				Log.d("main", "createViewItem item = " + item);
 				
 				if (item != null) {
-					ImageLoader.getInstance().displayImage(item.getImg(), img,
+					ImageLoader.getInstance().displayImage(item.getImageUrl(), img,
 							mOptions);
 					title.setText(item.getTitle() != null ? item.getTitle()
 							: "");
@@ -113,12 +113,12 @@ public class CycleImagePagerController<T> extends ViewBaseController {
 					@Override
 					public void onClick(View v) {
 						if (mOnCycleImagePagerClickListener != null) {
-							CycleImgPagerInfo<T> itemt = (CycleImgPagerInfo<T>) mAdapter
+							ImageItemInfo itemt = (ImageItemInfo) mAdapter
 									.getItem(position);
 							if(itemt!=null)
 							mOnCycleImagePagerClickListener
 									.OnCycleImagePagerClick(position,
-											itemt.t);
+											item);
 						}
 					}
 				});
@@ -136,7 +136,7 @@ public class CycleImagePagerController<T> extends ViewBaseController {
 			@Override
 			public void onPageSelected(int arg0) {
 				if(mOnCycleImagePagerChangeListener!=null && mList!=null && mList.size()>arg0){
-					mOnCycleImagePagerChangeListener.OnCycleImagePagerChange(arg0, mList.get(arg0).t);
+					mOnCycleImagePagerChangeListener.OnCycleImagePagerChange(arg0, mList.get(arg0));
 				}
 			}
 			
@@ -206,13 +206,13 @@ public class CycleImagePagerController<T> extends ViewBaseController {
 		mViewPager.setCurrentItem(position);
 	}
 
-	ArrayList<CycleImgPagerInfo<T>> mList;
+	ArrayList<ImageItemInfo> mList;
 
-	public void setData(ArrayList<CycleImgPagerInfo<T>> mList) {
+	public void setData(ArrayList<ImageItemInfo> mList) {
 		this.mList = mList;
 		mAdapter.setList(mList);
 		if(mOnCycleImagePagerChangeListener!=null && mList!=null && mList.size()>0){
-			mOnCycleImagePagerChangeListener.OnCycleImagePagerChange(0, mList.get(0).t);
+			mOnCycleImagePagerChangeListener.OnCycleImagePagerChange(0, mList.get(0));
 		}
 	}
 
@@ -223,14 +223,14 @@ public class CycleImagePagerController<T> extends ViewBaseController {
 	}
 
 	// cycle image paper click
-	OnCycleImagePagerClickListener<T> mOnCycleImagePagerClickListener;
+	OnCycleImagePagerClickListener<ImageItemInfo> mOnCycleImagePagerClickListener;
 
 	/**
 	 * Set the mOnCycleImagePagerClickListener
 	 * 
 	 * @return the mOnCycleImagePagerClickListener
 	 */
-	public OnCycleImagePagerClickListener<T> getmOnCycleImagePagerClickListener() {
+	public OnCycleImagePagerClickListener<ImageItemInfo> getmOnCycleImagePagerClickListener() {
 		return mOnCycleImagePagerClickListener;
 	}
 
@@ -241,7 +241,7 @@ public class CycleImagePagerController<T> extends ViewBaseController {
 	 *            the mOnCycleImagePagerClickListener to set
 	 */
 	public void setmOnCycleImagePagerClickListener(
-			OnCycleImagePagerClickListener<T> mOnCycleImagePagerClickListener) {
+			OnCycleImagePagerClickListener<ImageItemInfo> mOnCycleImagePagerClickListener) {
 		this.mOnCycleImagePagerClickListener = mOnCycleImagePagerClickListener;
 	}
 
@@ -297,19 +297,19 @@ public class CycleImagePagerController<T> extends ViewBaseController {
 	}
 	//-----------------------------
 	// cycle image paper change
-	OnCycleImagePagerChangeListener<T> mOnCycleImagePagerChangeListener;
+	OnCycleImagePagerChangeListener<ImageItemInfo> mOnCycleImagePagerChangeListener;
 
-	public OnCycleImagePagerChangeListener<T> getmOnCycleImagePagerChangeListener() {
+	public OnCycleImagePagerChangeListener<ImageItemInfo> getmOnCycleImagePagerChangeListener() {
 		return mOnCycleImagePagerChangeListener;
 	}
 
 	public void setmOnCycleImagePagerChangeListener(
-			OnCycleImagePagerChangeListener<T> mOnCycleImagePagerChangeListener) {
+			OnCycleImagePagerChangeListener<ImageItemInfo> mOnCycleImagePagerChangeListener) {
 		this.mOnCycleImagePagerChangeListener = mOnCycleImagePagerChangeListener;
 	}
 
-	public interface OnCycleImagePagerChangeListener<T> {
-		public void OnCycleImagePagerChange(int pageid, T t);
+	public interface OnCycleImagePagerChangeListener<ImageItemInfo> {
+		public void OnCycleImagePagerChange(int pageid, ImageItemInfo t);
 	}
 	
 	public void onResume() {

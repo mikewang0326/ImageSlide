@@ -44,8 +44,6 @@ public class MainActivity extends Activity {
 		
 		});
 		
-		ArrayList<CycleImgPagerInfo<ImageItemInfo>> mPageInfoList = new ArrayList<CycleImgPagerInfo<ImageItemInfo>>();
-		
 		ImageItemInfo imageItemInfo = new ImageItemInfo();
 	    imageItemInfo.setDescripe("test");
 	    imageItemInfo.setHref("http://www.sina.com.cn");
@@ -57,14 +55,7 @@ public class MainActivity extends Activity {
 		list.add(imageItemInfo);
 		list.add(imageItemInfo);
 		
-		for (ImageItemInfo item : list) {
-			CycleImgPagerInfo<ImageItemInfo> pageinfo = new CycleImgPagerInfo<ImageItemInfo>();
-			pageinfo.setImg(item.getImageUrl());
-			pageinfo.setTitle(item.getTitle());
-			pageinfo.t = item;
-			mPageInfoList.add(pageinfo);
-		}
-		cycleController.setData(mPageInfoList);
+		cycleController.setData(list);
 	}
 	
 }
