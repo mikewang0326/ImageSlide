@@ -28,7 +28,7 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 	public ImageSliderPagerController(Activity act, View mBaseView,
 			boolean isInflater) {
 		super(act, mBaseView, R.id.cycle_container,
-				isInflater ? R.layout.cycle_img_pager : INVALID_LAYOUT_RES_ID);
+				isInflater ? R.layout.image_slider_pager : INVALID_LAYOUT_RES_ID);
 	}
 
 	private DisplayImageOptions mOptions;
@@ -73,10 +73,32 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 				.bitmapConfig(Bitmap.Config.RGB_565).build();
 	}
 
+	private void initAdapter() {
+		mAdapter = new BannerPagerAdapter<ImageSlideItem>(mActivity);
+		mAdapter.setShowInfoEnable(true);
+		mAdapter.setCycleClickListener(mOnImageSliderPagerClickListener);
+	}
+	
 	private void initViewPager() {
-		mViewPager = (ImageSliderViewPager) this.mView.findViewById(R.id.cvp);// 鑾峰緱cvp瀵硅薄
+		mViewPager = (ImageSliderViewPager) this.mView.findViewById(R.id.slider_view_pager); 
 		mViewPager.setSliderAdapter(mAdapter);
 		mViewPager.setOnPageChangeListener(null);
+	}
+	
+	private void controlViewPagerSpeed() {  
+		try {  
+		    Field mField;  
+		    mField = ViewPager.class.getDeclaredField("mScroller");  
+		    mField.setAccessible(true);  
+		  
+		    mScroller = new FixedSpeedScroller(  
+		    		mViewPager.getContext(),  
+		       null);  
+		    mScroller.setmDuration(2000); 
+		    mField.set(mViewPager, mScroller);  
+		} catch (Exception e) {  
+		    e.printStackTrace();  
+		}
 	}
 
 	private void initIndiacator() {
@@ -88,7 +110,7 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 			public void onViewAttachedToWindow(View v) {
 				Log.d(TAG, "onViewAttachedToWindow()");
 				if(mAutoFlow){
-					startAutoFlowTimer();
+				   startAutoFlowTimer();
 				}
 			}
 			
@@ -97,7 +119,6 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 				Log.d(TAG, "onViewDetachedFromWindow()");
 				stopAutoFlowTimer();
 			}
-			
 		});
 		
 		mIndicator.setViewPager(mViewPager, 0);
@@ -119,28 +140,6 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 		});
 	}
 
-	private void initAdapter() {
-		mAdapter = new BannerPagerAdapter<ImageSlideItem>(mActivity);
-		mAdapter.setShowInfoEnable(true);
-		mAdapter.setCycleClickListener(mOnImageSliderPagerClickListener);
-	}
-	
-	private void controlViewPagerSpeed() {  
-		try {  
-		    Field mField;  
-		    mField = ViewPager.class.getDeclaredField("mScroller");  
-		    mField.setAccessible(true);  
-		  
-		    mScroller = new FixedSpeedScroller(  
-		    		mViewPager.getContext(),  
-		       null);  
-		    mScroller.setmDuration(2000); 
-		    mField.set(mViewPager, mScroller);  
-		} catch (Exception e) {  
-		    e.printStackTrace();  
-		}  
-		   } 
-	
 	public void setIndicatorEnable(boolean enable){
 		mIndicatorEnable = enable;
 		if(mIndicatorEnable){

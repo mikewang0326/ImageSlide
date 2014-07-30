@@ -14,7 +14,7 @@
         android:background="#ffffff" >
 
         <com.example.imageslider.ImageSliderViewPager
-            android:id="@+id/cvp"
+            android:id="@+id/slider_view_pager"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/ht_base_viewflow" >
         </com.example.imageslider.ImageSliderViewPager>

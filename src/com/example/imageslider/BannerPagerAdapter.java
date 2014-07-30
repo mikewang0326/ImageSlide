@@ -46,7 +46,7 @@ public class BannerPagerAdapter<ImageSlideItem> extends ImageSliderPagerAdapter{
 		BannerItem item = (BannerItem) this
 				.getItem(position);
 		View v = this.mContext.getLayoutInflater().inflate(
-				R.layout.cycle_img_pager_item, null);
+				R.layout.item_slider_image_pager, null);
 		ImageView iv = (ImageView) v.findViewById(R.id.img);
 		TextView title = (TextView) v.findViewById(R.id.img_title);
 		
