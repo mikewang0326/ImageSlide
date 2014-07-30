@@ -1,6 +1,6 @@
 package com.example.imageslider;
 
-public class BannerItem extends ImageSlideItem{
+public class BannerItem implements ImageSlideItem{
 	
 	private String id;
 	

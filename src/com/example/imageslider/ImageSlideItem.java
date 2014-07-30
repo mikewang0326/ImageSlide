@@ -1,5 +1,5 @@
 package com.example.imageslider;
 
-public class ImageSlideItem {
+public interface ImageSlideItem {
 	
 }

@@ -16,18 +16,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.example.imageslider.CirclePageIndicator.MyOnAttachStateChangeListener;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ImageSliderPagerController<T> extends ViewBaseController {
 	
-	private String TAG_CIPC = "cipc";
+	private String TAG = "ispc";
 	
 	public ImageSliderPagerController(Activity act, View mBaseView,
 			boolean isInflater) {
@@ -35,7 +31,6 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 				isInflater ? R.layout.cycle_img_pager : INVALID_LAYOUT_RES_ID);
 	}
 
-//	private ImageLoader mImgLoader = ImageLoader.getInstance();
 	private DisplayImageOptions mOptions;
 
 	private ImageSliderViewPager mViewPager;
@@ -46,15 +41,17 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 	private FixedSpeedScroller mScroller;
 	
 	private Handler mHandler;
-	private int mTimeSpan = 5000;
 	
-	LinearLayout mInfo;
+	private int mTimeSpan = 5000;//default value
+	
+	private LinearLayout mInfo;
+	
+	private ArrayList<ImageSlideItem> mList;
 
 	@Override
 	protected void initView() {
 		Log.d("main", "initView mActivity = " + mActivity);
 		
-//		mImgLoader = ImageLoaderFactory.getImageLoader(mActivity);
 		mOptions = new DisplayImageOptions.Builder()
 				// .showStubImage(R.drawable.bg_base_magazine_item)
 				// .showImageForEmptyUri(R.drawable.bg_base_magazine_item)
@@ -69,7 +66,7 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 			
 			@Override
 			public void onViewAttachedToWindow(View v) {
-				Log.d(TAG_CIPC, "onViewAttachedToWindow()");
+				Log.d(TAG, "onViewAttachedToWindow()");
 				if(isAutoFlow){
 					startAutoFlowTimer();
 				}
@@ -77,7 +74,7 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 			
 			@Override
 			public void onViewDetachedFromWindow(View v) {
-				Log.d(TAG_CIPC, "onViewDetachedFromWindow()");
+				Log.d(TAG, "onViewDetachedFromWindow()");
 				stopAutoFlowTimer();
 			}
 			
@@ -87,9 +84,9 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 		
 		mAdapter.setShowInfoEnable(true);
 		
-		mAdapter.setCycleClickListener(mOnCycleImagePagerClickListener);
+		mAdapter.setCycleClickListener(mOnImageSliderPagerClickListener);
 		
-		mViewPager.setCycleAdapter(mAdapter);
+		mViewPager.setSliderAdapter(mAdapter);
 //		mViewPager.setOnCyclePageChangeListener(null);
 		mViewPager.setOnPageChangeListener(null);
 		
@@ -147,8 +144,12 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 		mHandler.sendMessageDelayed(message, mTimeSpan);
 	}
 
-	private void setTimeSpan(int timeSpan) {
+	public void setTimeSpan(int timeSpan) {
 		mTimeSpan = timeSpan;
+	}
+	
+	public int getTimeSpan() {
+		return mTimeSpan;
 	}
 	
 	public void stopAutoFlowTimer() {
@@ -169,8 +170,6 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 		mViewPager.setCurrentItem(position);
 	}
 
-	ArrayList<ImageSlideItem> mList;
-
 	public void setData(ArrayList<ImageSlideItem> mList) {
 		this.mList = mList;
 		mAdapter.setList(mList);
@@ -179,14 +178,8 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 		}
 	}
 
-	public void startFlow() {
-	}
-
-	public void endFlow() {
-	}
-
 	// cycle image paper click
-	OnCycleImagePagerClickListener<ImageSlideItem> mOnCycleImagePagerClickListener;
+	OnCycleImagePagerClickListener<ImageSlideItem> mOnImageSliderPagerClickListener;
 
 	/**
 	 * Set the mOnCycleImagePagerClickListener
@@ -194,7 +187,7 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 	 * @return the mOnCycleImagePagerClickListener
 	 */
 	public OnCycleImagePagerClickListener<ImageSlideItem> getmOnCycleImagePagerClickListener() {
-		return mOnCycleImagePagerClickListener;
+		return mOnImageSliderPagerClickListener;
 	}
 
 	/**
@@ -205,7 +198,7 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 	 */
 	public void setmOnCycleImagePagerClickListener(
 			OnCycleImagePagerClickListener<ImageSlideItem> mOnCycleImagePagerClickListener) {
-		this.mOnCycleImagePagerClickListener = mOnCycleImagePagerClickListener;
+		this.mOnImageSliderPagerClickListener = mOnCycleImagePagerClickListener;
 	}
 
 	public interface OnCycleImagePagerClickListener<T> {
@@ -214,7 +207,7 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 	
 	@Override
 	public void onDestory() {
-		Log.d(TAG_CIPC, "CycleImagePagerController onDestroy() mIndicator = " + mIndicator);
+		Log.d(TAG, "CycleImagePagerController onDestroy() mIndicator = " + mIndicator);
 		if (null != mIndicator) {
 			stopAutoFlowTimer();
 		}

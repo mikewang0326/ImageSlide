@@ -11,27 +11,22 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 public class ImageSliderViewPager extends ViewPager {
-
+	
 	/**
-	 * The constructor
-	 * 
-	 * @param context
-	 * @param attrs
+	 *  the last x position 
 	 */
+	private float mLastX;
+	private float mLastY;
+
 	public ImageSliderViewPager(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
 
-	/**
-	 * The constructor
-	 * 
-	 * @param context
-	 */
 	public ImageSliderViewPager(Context context) {
 		super(context);
 	}
 
-	public void setCycleAdapter(ImageSliderPagerAdapter adapter) {
+	public void setSliderAdapter(ImageSliderPagerAdapter adapter) {
 		super.setAdapter(adapter);
 	}
 
@@ -39,16 +34,9 @@ public class ImageSliderViewPager extends ViewPager {
 		super.setOnPageChangeListener(listener);
 	}
 
-	// viewpager 嵌套viewpager
-
-	/** the last x position */
-	private float lastX;
-	private float lastY;
-
-	int slidingLflag = 1;
-	int slidingRflag = 2;
-	int sliding = 0;
-
+	/*
+	 * handle the event for viewpager in viewpager
+	 */
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
 		final int action = ev.getAction();
@@ -58,9 +46,8 @@ public class ImageSliderViewPager extends ViewPager {
 			this.getParent().requestDisallowInterceptTouchEvent(true);
 			// Log.e("down  Int" + sliding);
 			// save the current x position
-			this.lastX = ev.getX();
-			this.lastY = ev.getY();
-			sliding = 0;
+			this.mLastX = ev.getX();
+			this.mLastY = ev.getY();
 			break;
 
 		case MotionEvent.ACTION_UP:
@@ -68,17 +55,16 @@ public class ImageSliderViewPager extends ViewPager {
 			this.getParent().requestDisallowInterceptTouchEvent(false);
 			// Log.e("up  Int" + sliding);
 			// save the current x position
-			this.lastX = ev.getX();
-			this.lastY = ev.getY();
-			sliding = 0;
+			this.mLastX = ev.getX();
+			this.mLastY = ev.getY();
 			break;
 
 		case MotionEvent.ACTION_MOVE:
-			this.lastX = ev.getX();
-			this.lastY = ev.getY();
+			this.mLastX = ev.getX();
+			this.mLastY = ev.getY();
 
-			if (Math.abs(ev.getX() - this.lastX) > Math.abs(ev.getY()
-					- this.lastY)) {
+			if (Math.abs(ev.getX() - this.mLastX) > Math.abs(ev.getY()
+					- this.mLastY)) {
 				this.getParent().requestDisallowInterceptTouchEvent(true);
 			} else {
 				// this.getParent().requestDisallowInterceptTouchEvent(false);
@@ -98,9 +84,8 @@ public class ImageSliderViewPager extends ViewPager {
 			this.getParent().requestDisallowInterceptTouchEvent(true);
 
 			// save the current x position
-			this.lastX = ev.getX();
-			this.lastY = ev.getY();
-			sliding = 0;
+			this.mLastX = ev.getX();
+			this.mLastY = ev.getY();
 			break;
 
 		case MotionEvent.ACTION_UP:
@@ -108,21 +93,17 @@ public class ImageSliderViewPager extends ViewPager {
 			this.getParent().requestDisallowInterceptTouchEvent(false);
 
 			// save the current x position
-			this.lastX = ev.getX();
-			this.lastY = ev.getY();
-			sliding = 0;
+			this.mLastX = ev.getX();
+			this.mLastY = ev.getY();
 			break;
 
 		case MotionEvent.ACTION_MOVE:
-
-			
-			this.lastX = ev.getX();
-			this.lastY = ev.getY();
+			this.mLastX = ev.getX();
+			this.mLastY = ev.getY();
 			break;
 		}
 
 		return super.onTouchEvent(ev);
-		// return true;
 	}
 
 }

@@ -56,8 +56,6 @@ public class BannerPagerAdapter<ImageSlideItem> extends ImageSliderPagerAdapter{
 			title.setVisibility(View.INVISIBLE);
 		}
 		
-		Log.d("main", "createViewItem item = " + item);
-		
 		if (item != null) {
 			ImageLoader.getInstance().displayImage(item.getImageUrl(), iv,
 					mOptions);
