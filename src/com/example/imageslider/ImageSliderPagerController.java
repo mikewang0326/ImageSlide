@@ -46,9 +46,9 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 	
 	private int mTimeSpan = 5000;//default value
 	
-	private LinearLayout mLayoutInfo;
+	private LinearLayout mIndicatorLayout;
 	
-	private boolean isShowInfo = true;
+	private boolean mIndicatorEnable = false;
 	
 	private ArrayList<ImageSlideItem> mSlideList;
 	
@@ -58,7 +58,6 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 	protected void initView() {
 		Log.d(TAG, "initView mActivity = " + mActivity);
 		initImageLoader();
-		mLayoutInfo = (LinearLayout) this.mView.findViewById(R.id.viewflow_dic_ll);
 		initAdapter();
 		initViewPager();
 		controlViewPagerSpeed();
@@ -81,6 +80,7 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 	}
 
 	private void initIndiacator() {
+		mIndicatorLayout = (LinearLayout) this.mView.findViewById(R.id.viewflow_dic_ll);
 		mIndicator = (CirclePageIndicator) this.mView.findViewById(R.id.viewflowindic);
 		mIndicator.addMyOnAttachStateChangeListener(new MyOnAttachStateChangeListener() {
 			
@@ -141,12 +141,12 @@ public class ImageSliderPagerController<T> extends ViewBaseController {
 		}  
 		   } 
 	
-	public void setShowInfo(boolean isShowInfo){
-		this.isShowInfo = isShowInfo;
-		if(isShowInfo){
-			mLayoutInfo.setVisibility(View.VISIBLE);
+	public void setIndicatorEnable(boolean enable){
+		mIndicatorEnable = enable;
+		if(mIndicatorEnable){
+			mIndicatorLayout.setVisibility(View.VISIBLE);
 		}else{
-			mLayoutInfo.setVisibility(View.INVISIBLE);
+			mIndicatorLayout.setVisibility(View.INVISIBLE);
 		}
 	}
 	

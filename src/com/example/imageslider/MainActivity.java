@@ -29,7 +29,7 @@ public class MainActivity extends Activity {
 
 				});
 		
-		cycleController.setShowInfo(true);
+		cycleController.setIndicatorEnable(true);
 
 		cycleController.setOnImageSliderPagerChangeListener(new ImageSliderPagerController.OnImageSliderPagerChangeListener<ImageSlideItem>() {
 
