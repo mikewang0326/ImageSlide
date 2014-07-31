@@ -1,6 +1,6 @@
 package com.example.imageslider;
 
-public class BannerItem implements ImageSlideItem{
+public class BannerItem{
 	
 	private String id;
 	
@@ -47,4 +47,5 @@ public class BannerItem implements ImageSlideItem{
 	public String getTitle() {
 		return title;
 	}
+
 }

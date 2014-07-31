@@ -26,7 +26,7 @@ public class ImageSliderViewPager extends ViewPager {
 		super(context);
 	}
 
-	public void setSliderAdapter(ImageSliderPagerAdapter adapter) {
+	public void setSliderAdapter(BasePagerAdapter adapter) {
 		super.setAdapter(adapter);
 	}
 
